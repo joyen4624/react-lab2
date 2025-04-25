@@ -1,117 +1,60 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+// App.tsx
+import React, { useState } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  StatusBar,
+  ScrollView,
 } from 'react-native';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// MSSV: 2124802010151 - Lê Sỹ Hoài
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+type ScreenName = 'login' | 'register' | 'reset';
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const App: React.FC = () => {
+  // State to control which screen to show
+  const [currentScreen, setCurrentScreen] = useState<ScreenName>('login');
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  // Handler for navigation between screens
+  const handleNavigate = (screenName: ScreenName): void => {
+    setCurrentScreen(screenName);
+  };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  // Render appropriate screen based on state
+  const renderScreen = (): React.ReactNode => {
+    switch (currentScreen) {
+      case 'login':
+        return <LoginScreen onNavigate={handleNavigate} />;
+      case 'register':
+        return <RegisterScreen onNavigate={handleNavigate} />;
+      case 'reset':
+        return <ResetPasswordScreen onNavigate={handleNavigate} />;
+      default:
+        return <LoginScreen onNavigate={handleNavigate} />;
+    }
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" />
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        {renderScreen()}
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
 });
 
